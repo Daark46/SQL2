@@ -45,3 +45,30 @@ join city c2 on c2.city_id = a.city_id
 group by s.staff_id, c2.city_id 
 having COUNT(c.customer_id) > 300;
 ```
+### Задание 2
+
+Получите количество фильмов, продолжительность которых больше средней продолжительности всех фильмов.
+
+### Ответ 2
+```
+select COUNT(f.title)
+from film f  
+where f.`length`  >
+  (select AVG(`length`) 
+  from film); 
+```
+
+### Задание 3
+
+Получите информацию, за какой месяц была получена наибольшая сумма платежей, и добавьте информацию по количеству аренд за этот месяц.
+
+### Ответ 3
+```
+select t1.amount_of_payments, t1.month_of_payments
+from (
+  select SUM(p.amount) amount_of_payments, DATE_FORMAT(p.payment_date, '%M %Y') month_of_payments 
+  from sakila.payment p 
+  group by DATE_FORMAT(p.payment_date, '%M %Y')) t1
+order by t1.amount_of_payments desc  
+limit 1;
+```
